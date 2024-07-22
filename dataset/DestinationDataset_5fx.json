@@ -1,0 +1,23 @@
+{
+	"name": "DestinationDataset_5fx",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ADLS_datalakeudemylaboratorio",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "themes.txt",
+				"fileSystem": "lego"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
