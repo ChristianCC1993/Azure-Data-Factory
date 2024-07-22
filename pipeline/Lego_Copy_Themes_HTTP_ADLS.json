@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_5fx",
+				"name": "Copy",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
