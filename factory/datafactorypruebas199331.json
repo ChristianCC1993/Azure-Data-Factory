@@ -1,0 +1,9 @@
+{
+	"name": "datafactorypruebas199331",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8cfa029d-cd5a-47fd-9887-90dcc6b50d64",
+		"tenantId": "6fd48f41-af81-45a5-9c1e-e3990bc27e7c"
+	}
+}
