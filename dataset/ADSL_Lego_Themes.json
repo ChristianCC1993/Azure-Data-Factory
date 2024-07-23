@@ -1,5 +1,5 @@
 {
-	"name": "DestinationDataset_5fx",
+	"name": "ADSL_Lego_Themes",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ADLS_datalakeudemylaboratorio",

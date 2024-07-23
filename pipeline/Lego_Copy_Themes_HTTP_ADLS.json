@@ -79,7 +79,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DestinationDataset_5fx",
+						"referenceName": "ADSL_Lego_Themes",
 						"type": "DatasetReference"
 					}
 				]
