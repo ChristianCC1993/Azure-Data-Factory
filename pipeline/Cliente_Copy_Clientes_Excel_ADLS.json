@@ -36,8 +36,9 @@
 						"mappings": [
 							{
 								"source": {
+									"name": "Nombre Empresa",
 									"type": "String",
-									"ordinal": 1
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "nombreEmpresa",
@@ -47,8 +48,9 @@
 							},
 							{
 								"source": {
+									"name": "Nombre Cliente",
 									"type": "String",
-									"ordinal": 2
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "nombreCliente",
@@ -58,8 +60,9 @@
 							},
 							{
 								"source": {
+									"name": "Tipo Cliente",
 									"type": "String",
-									"ordinal": 3
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "tipoCliente",
@@ -69,8 +72,9 @@
 							},
 							{
 								"source": {
+									"name": "Linea",
 									"type": "String",
-									"ordinal": 4
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "Linea",
@@ -80,8 +84,9 @@
 							},
 							{
 								"source": {
+									"name": "Nro Celular",
 									"type": "String",
-									"ordinal": 5
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "NroCelular",
@@ -91,8 +96,23 @@
 							},
 							{
 								"source": {
+									"name": "Monto",
 									"type": "String",
-									"ordinal": 7
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Monto",
+									"type": "Decimal",
+									"physicalType": "money",
+									"scale": 4,
+									"precision": 19
+								}
+							},
+							{
+								"source": {
+									"name": "Fecha Contratacion",
+									"type": "String",
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "fechaContratacion",
@@ -102,8 +122,9 @@
 							},
 							{
 								"source": {
+									"name": "Tipo Servicio",
 									"type": "String",
-									"ordinal": 8
+									"physicalType": "String"
 								},
 								"sink": {
 									"name": "tipoServicio",

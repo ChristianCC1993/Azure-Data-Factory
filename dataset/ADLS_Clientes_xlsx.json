@@ -17,31 +17,40 @@
 				"fileName": "Cliente.xlsx",
 				"folderPath": "Move and Transform Activities",
 				"fileSystem": "dataset"
-			}
+			},
+			"firstRowAsHeader": true
 		},
 		"schema": [
 			{
+				"name": "Nombre Empresa",
 				"type": "String"
 			},
 			{
+				"name": "Nombre Cliente",
 				"type": "String"
 			},
 			{
+				"name": "Tipo Cliente",
 				"type": "String"
 			},
 			{
+				"name": "Linea",
 				"type": "String"
 			},
 			{
+				"name": "Nro Celular",
 				"type": "String"
 			},
 			{
+				"name": "Monto",
 				"type": "String"
 			},
 			{
+				"name": "Fecha Contratacion",
 				"type": "String"
 			},
 			{
+				"name": "Tipo Servicio",
 				"type": "String"
 			}
 		]
