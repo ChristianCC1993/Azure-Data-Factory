@@ -8,11 +8,29 @@
 		"ADLS_datalakeudemylaboratorio_accountKey": {
 			"value": ""
 		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
+			"value": ""
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "azure-adf1.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "azureAdventureWorksDW"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "christian"
+		},
 		"HTTP_Rebrickable_properties_typeProperties_url": {
 			"value": "https://cdn.rebrickable.com/media/downloads/"
+		},
+		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
+			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""

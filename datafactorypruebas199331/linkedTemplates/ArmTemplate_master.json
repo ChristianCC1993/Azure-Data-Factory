@@ -11,13 +11,37 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
 		},
+		"AzureSqlDatabase1_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+		},
+		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LinkedServices_ADLS_DataLakeUdemyLaboratorio'"
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-adf1.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "azureAdventureWorksDW"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "christian"
+		},
 		"HTTP_Rebrickable_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
+		},
+		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",
@@ -49,11 +73,29 @@
 					"ADLS_datalakeudemylaboratorio_accountKey": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_accountKey')]"
 					},
+					"AzureSqlDatabase1_password": {
+						"value": "[parameters('AzureSqlDatabase1_password')]"
+					},
+					"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
+						"value": "[parameters('LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey')]"
+					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
 					},
+					"AzureSqlDatabase1_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabase1_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_userName')]"
+					},
 					"HTTP_Rebrickable_properties_typeProperties_url": {
 						"value": "[parameters('HTTP_Rebrickable_properties_typeProperties_url')]"
+					},
+					"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
+						"value": "[parameters('LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url')]"
 					}
 				}
 			},
