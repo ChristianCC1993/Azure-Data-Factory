@@ -85,6 +85,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "1. Ingesta"
+		},
 		"annotations": []
 	}
 }
