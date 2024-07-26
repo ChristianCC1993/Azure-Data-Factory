@@ -19,6 +19,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LinkedServices_ADLS_DataLakeUdemyLaboratorio'"
 		},
+		"LinkedServices_ASQL_AWDW_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LinkedServices_ASQL_AWDW'"
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
@@ -42,6 +46,18 @@
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "azure-adf1.database.windows.net"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "@{linkedService().DataBaseName}"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "christian"
 		},
 		"containerUri": {
 			"type": "string",
@@ -79,6 +95,9 @@
 					"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 						"value": "[parameters('LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey')]"
 					},
+					"LinkedServices_ASQL_AWDW_password": {
+						"value": "[parameters('LinkedServices_ASQL_AWDW_password')]"
+					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
 					},
@@ -96,6 +115,15 @@
 					},
 					"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url')]"
+					},
+					"LinkedServices_ASQL_AWDW_properties_typeProperties_server": {
+						"value": "[parameters('LinkedServices_ASQL_AWDW_properties_typeProperties_server')]"
+					},
+					"LinkedServices_ASQL_AWDW_properties_typeProperties_database": {
+						"value": "[parameters('LinkedServices_ASQL_AWDW_properties_typeProperties_database')]"
+					},
+					"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
+						"value": "[parameters('LinkedServices_ASQL_AWDW_properties_typeProperties_userName')]"
 					}
 				}
 			},

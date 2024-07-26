@@ -14,6 +14,9 @@
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 			"value": ""
 		},
+		"LinkedServices_ASQL_AWDW_password": {
+			"value": ""
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
@@ -31,6 +34,15 @@
 		},
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_properties_typeProperties_url": {
 			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_server": {
+			"value": "azure-adf1.database.windows.net"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_database": {
+			"value": "@{linkedService().DataBaseName}"
+		},
+		"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
+			"value": "christian"
 		}
 	}
 }
