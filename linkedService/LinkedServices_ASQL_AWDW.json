@@ -1,0 +1,17 @@
+{
+	"name": "LinkedServices_ASQL_AWDW",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "azure-adf1.database.windows.net",
+			"database": "azureAdventureWorksDW",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "christian",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDJDREU3MkMzLTkyM0QtNDgyRS1BRkFFLTRFQTU1MkJBRjkxQV81OWJlMTE5MS02YTMzLTQzOGUtODA3ZC00ODU1NmZkNDMxYjQiDQp9"
+		}
+	}
+}
