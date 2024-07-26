@@ -1,0 +1,54 @@
+{
+	"name": "Tabla_Clientes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "2. Move nd Transform Activities"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "nombreEmpresa",
+				"type": "varchar"
+			},
+			{
+				"name": "nombreCliente",
+				"type": "varchar"
+			},
+			{
+				"name": "tipoCliente",
+				"type": "varchar"
+			},
+			{
+				"name": "Linea",
+				"type": "varchar"
+			},
+			{
+				"name": "NroCelular",
+				"type": "varchar"
+			},
+			{
+				"name": "Monto",
+				"type": "money",
+				"precision": 19,
+				"scale": 4
+			},
+			{
+				"name": "fechaContratacion",
+				"type": "date"
+			},
+			{
+				"name": "tipoServicio",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Cliente"
+		}
+	}
+}

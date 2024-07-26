@@ -1,0 +1,49 @@
+{
+	"name": "ADLS_Clientes_xlsx",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServices_ADLS_DataLakeUdemyLaboratorio",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "2. Move nd Transform Activities"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Cliente Nuevos",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Cliente.xlsx",
+				"folderPath": "Move and Transform Activities",
+				"fileSystem": "dataset"
+			}
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	}
+}
