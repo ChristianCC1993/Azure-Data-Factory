@@ -1,0 +1,63 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datafactorypruebas199331"
+		},
+		"ADLS_datalakeudemylaboratorio_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
+		},
+		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"HTTP_Rebrickable_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://cdn.rebrickable.com/media/downloads/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datafactorypruebas199331_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ADLS_datalakeudemylaboratorio_accountKey": {
+						"value": "[parameters('ADLS_datalakeudemylaboratorio_accountKey')]"
+					},
+					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
+						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
+					},
+					"HTTP_Rebrickable_properties_typeProperties_url": {
+						"value": "[parameters('HTTP_Rebrickable_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

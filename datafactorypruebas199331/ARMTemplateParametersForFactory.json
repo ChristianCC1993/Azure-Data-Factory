@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datafactorypruebas199331"
+		},
+		"ADLS_datalakeudemylaboratorio_accountKey": {
+			"value": ""
+		},
+		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
+			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"HTTP_Rebrickable_properties_typeProperties_url": {
+			"value": "https://cdn.rebrickable.com/media/downloads/"
+		}
+	}
+}
