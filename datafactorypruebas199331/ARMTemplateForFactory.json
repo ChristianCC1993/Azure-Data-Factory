@@ -144,19 +144,6 @@
 									{
 										"source": {
 											"type": "String",
-											"ordinal": 6
-										},
-										"sink": {
-											"name": "Monto",
-											"type": "Decimal",
-											"physicalType": "money",
-											"scale": 4,
-											"precision": 19
-										}
-									},
-									{
-										"source": {
-											"type": "String",
 											"ordinal": 7
 										},
 										"sink": {
