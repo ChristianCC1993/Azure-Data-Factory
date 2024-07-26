@@ -1,0 +1,26 @@
+{
+	"name": "ADLS_DataLakeUdemyLaboratorio_Table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServices_ADLS_DataLakeUdemyLaboratorio",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "2. Move nd Transform Activities"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Move and Transform Activities",
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
