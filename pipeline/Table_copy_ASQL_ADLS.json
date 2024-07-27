@@ -5,7 +5,14 @@
 			{
 				"name": "Copy_Table_ASQL_ADLS",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set variable FileName",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -63,12 +70,29 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"TableName": {
-								"value": "@pipeline().parameters.TableName",
+								"value": "@variables('FileName')",
 								"type": "Expression"
 							}
 						}
 					}
 				]
+			},
+			{
+				"name": "Set variable FileName",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "FileName",
+					"value": {
+						"value": "@{pipeline().parameters.TableName}_@{utcnow()}.csv",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -79,6 +103,11 @@
 			"TableName": {
 				"type": "String",
 				"defaultValue": "Customer"
+			}
+		},
+		"variables": {
+			"FileName": {
+				"type": "String"
 			}
 		},
 		"folder": {
