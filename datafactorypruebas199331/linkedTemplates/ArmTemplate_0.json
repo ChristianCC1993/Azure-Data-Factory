@@ -236,6 +236,11 @@
 					"referenceName": "LinkedServices_ADLS_DataLakeUdemyLaboratorio",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"TableName": {
+						"type": "String"
+					}
+				},
 				"folder": {
 					"name": "2. Move nd Transform Activities"
 				},
@@ -244,6 +249,10 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat(dataset().TableName)",
+							"type": "Expression"
+						},
 						"folderPath": "Move and Transform Activities",
 						"fileSystem": "dataset"
 					},
@@ -306,6 +315,9 @@
 				},
 				"parameters": {
 					"dataBaseName": {
+						"type": "string"
+					},
+					"TableName": {
 						"type": "string"
 					}
 				},
@@ -381,7 +393,10 @@
 				],
 				"typeProperties": {
 					"schema": "SalesLT",
-					"table": "Customer"
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
 				}
 			},
 			"dependsOn": [
@@ -780,7 +795,14 @@
 					{
 						"name": "Copy_Table_ASQL_ADLS",
 						"type": "Copy",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set variable FileName",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"policy": {
 							"timeout": "0.12:00:00",
 							"retry": 0,
@@ -824,6 +846,10 @@
 									"dataBaseName": {
 										"value": "@pipeline().parameters.DataBaseName",
 										"type": "Expression"
+									},
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
 									}
 								}
 							}
@@ -832,9 +858,31 @@
 							{
 								"referenceName": "ADLS_DataLakeUdemyLaboratorio_Table",
 								"type": "DatasetReference",
-								"parameters": {}
+								"parameters": {
+									"TableName": {
+										"value": "@variables('FileName')",
+										"type": "Expression"
+									}
+								}
 							}
 						]
+					},
+					{
+						"name": "Set variable FileName",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "FileName",
+							"value": {
+								"value": "@concat(\n    pipeline().parameters.TableName, \n    '-',\n    formatDateTime(utcnow(), 'yyyyMMdd'),\n    '.csv'\n)",
+								"type": "Expression"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -844,6 +892,15 @@
 					"DataBaseName": {
 						"type": "string",
 						"defaultValue": "azureAdventureWorksDW"
+					},
+					"TableName": {
+						"type": "String",
+						"defaultValue": "Customer"
+					}
+				},
+				"variables": {
+					"FileName": {
+						"type": "String"
 					}
 				},
 				"folder": {
