@@ -1,5 +1,5 @@
 {
-	"name": "Primer Data Flow",
+	"name": "dataflow1",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -14,11 +14,7 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "ABS_StorageUdemyLboratorio_Customer",
-						"type": "DatasetReference"
-					},
-					"name": "sinkCustomer"
+					"name": "sink1"
 				}
 			],
 			"transformations": [],
@@ -46,10 +42,8 @@
 				"     format: 'table') ~> sourceCustomer",
 				"sourceCustomer sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[(concat('Customer_', toString(currentDate()),'.csv'))],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sinkCustomer"
+				"     skipDuplicateMapOutputs: true) ~> sink1"
 			]
 		}
 	}
