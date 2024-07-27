@@ -23,6 +23,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'LinkedServices_ASQL_AWDW'"
 		},
+		"LinkedServices_ASQL_AWDW2_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServices_ASQL_AWDW2'"
+		},
+		"LinkedServices_StorageUdemyLaboratorio_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
@@ -97,6 +105,12 @@
 					},
 					"LinkedServices_ASQL_AWDW_password": {
 						"value": "[parameters('LinkedServices_ASQL_AWDW_password')]"
+					},
+					"LinkedServices_ASQL_AWDW2_connectionString": {
+						"value": "[parameters('LinkedServices_ASQL_AWDW2_connectionString')]"
+					},
+					"LinkedServices_StorageUdemyLaboratorio_connectionString": {
+						"value": "[parameters('LinkedServices_StorageUdemyLaboratorio_connectionString')]"
 					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"

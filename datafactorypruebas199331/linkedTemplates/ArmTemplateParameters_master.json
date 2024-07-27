@@ -17,6 +17,12 @@
 		"LinkedServices_ASQL_AWDW_password": {
 			"value": ""
 		},
+		"LinkedServices_ASQL_AWDW2_connectionString": {
+			"value": ""
+		},
+		"LinkedServices_StorageUdemyLaboratorio_connectionString": {
+			"value": ""
+		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
