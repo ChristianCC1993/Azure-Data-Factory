@@ -1165,8 +1165,10 @@
 						"     format: 'table') ~> sourceCustomer",
 						"sourceCustomer sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     partitionFileNames:['Customer.csv'],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sinkCustomer"
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkCustomer"
 					]
 				}
 			},
