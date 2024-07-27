@@ -89,7 +89,7 @@
 				"typeProperties": {
 					"variableName": "FileName",
 					"value": {
-						"value": "@{pipeline().parameters.TableName}_@{utcnow()}.csv",
+						"value": "@concat(\n    pipeline().parameters.TableName, \n    '-',\n    formatDateTime(utcnow(), 'yyyyMMdd'),\n    '.csv'\n)",
 						"type": "Expression"
 					}
 				}
