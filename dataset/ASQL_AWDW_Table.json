@@ -14,6 +14,9 @@
 		"parameters": {
 			"dataBaseName": {
 				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
 			}
 		},
 		"folder": {
@@ -88,7 +91,10 @@
 		],
 		"typeProperties": {
 			"schema": "SalesLT",
-			"table": "Customer"
+			"table": {
+				"value": "@dataset().TableName",
+				"type": "Expression"
+			}
 		}
 	}
 }

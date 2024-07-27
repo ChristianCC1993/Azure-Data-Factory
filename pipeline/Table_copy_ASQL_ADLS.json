@@ -49,6 +49,10 @@
 							"dataBaseName": {
 								"value": "@pipeline().parameters.DataBaseName",
 								"type": "Expression"
+							},
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
 							}
 						}
 					}
@@ -56,7 +60,13 @@
 				"outputs": [
 					{
 						"referenceName": "ADLS_DataLakeUdemyLaboratorio_Table",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							}
+						}
 					}
 				]
 			}
@@ -65,6 +75,10 @@
 			"DataBaseName": {
 				"type": "string",
 				"defaultValue": "azureAdventureWorksDW"
+			},
+			"TableName": {
+				"type": "String",
+				"defaultValue": "Customer"
 			}
 		},
 		"folder": {

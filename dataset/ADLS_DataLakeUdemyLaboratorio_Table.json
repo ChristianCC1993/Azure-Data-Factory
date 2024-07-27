@@ -5,6 +5,11 @@
 			"referenceName": "LinkedServices_ADLS_DataLakeUdemyLaboratorio",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"TableName": {
+				"type": "String"
+			}
+		},
 		"folder": {
 			"name": "2. Move nd Transform Activities"
 		},
@@ -13,6 +18,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().TableName",
+					"type": "Expression"
+				},
 				"folderPath": "Move and Transform Activities",
 				"fileSystem": "dataset"
 			},
