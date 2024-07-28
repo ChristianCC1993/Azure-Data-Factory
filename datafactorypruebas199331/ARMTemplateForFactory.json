@@ -123,6 +123,56 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/3-Join')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Join",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "3-Join",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceProducto": {},
+									"sourceSubCategoriaProducto": {},
+									"sinkProductInnerJoin": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/3-Join')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Cliente_Copy_Clientes_Excel_ADLS')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1343,6 +1393,99 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/3-Join')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceProducto"
+						},
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceSubCategoriaProducto"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkProductInnerJoin"
+						}
+					],
+					"transformations": [
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ProductoId as short,",
+						"          NombreProducto as string,",
+						"          ProductoSubCategoriaId as short,",
+						"          Descripcion as string,",
+						"          Categoria as string,",
+						"          Color as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '3.Join',",
+						"     fileName: 'Producto.xlsx',",
+						"     sheetName: 'Producto',",
+						"     firstRowAsHeader: true) ~> sourceProducto",
+						"source(output(",
+						"          SubCategoriaProductoId as short,",
+						"          NombreSubCategoria as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '3.Join',",
+						"     fileName: 'SubCategoriaProducto.xlsx',",
+						"     sheetName: 'SubCategoriaProducto',",
+						"     firstRowAsHeader: true) ~> sourceSubCategoriaProducto",
+						"sourceProducto, sourceSubCategoriaProducto join(ProductoSubCategoriaId == SubCategoriaProductoId,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '3.Join',",
+						"     columnDelimiter: ';',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:[(concat('ProductInnerJoin_',toString(currentDate()),'.csv'))],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkProductInnerJoin"
+					]
+				}
+			},
+			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
 			]
 		}
