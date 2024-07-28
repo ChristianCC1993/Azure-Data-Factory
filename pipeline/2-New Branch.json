@@ -1,9 +1,9 @@
 {
-	"name": "Primer_Data_Flow",
+	"name": "2-New Branch",
 	"properties": {
 		"activities": [
 			{
-				"name": "Nuestro Primer Data Flow",
+				"name": "Data flow Product",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "1-Primer Data Flow",
+						"referenceName": "2-New Branch",
 						"type": "DataFlowReference"
 					},
 					"compute": {

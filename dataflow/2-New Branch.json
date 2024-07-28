@@ -1,0 +1,64 @@
+{
+	"name": "2-New Branch",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_ASQL_AWDW2",
+						"type": "LinkedServiceReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkproductCSV"
+				},
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkProductJSON"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'SELECT *\\nFROM SalesLT.Product',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '2. New Branch',",
+				"     columnDelimiter: ';',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:[(concat('Product_',toString(currentDate()),'.csv'))],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkproductCSV",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'json',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '2. New Branch',",
+				"     partitionFileNames:[(concat('Product_',toString(currentDate()),'.JSON'))],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkProductJSON"
+			]
+		}
+	}
+}
