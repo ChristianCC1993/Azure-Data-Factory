@@ -1465,7 +1465,7 @@
 						"     sheetName: 'SubCategoriaProducto',",
 						"     firstRowAsHeader: true) ~> sourceSubCategoriaProducto",
 						"sourceProducto, sourceSubCategoriaProducto join(ProductoSubCategoriaId == SubCategoriaProductoId,",
-						"     joinType:'inner',",
+						"     joinType:'left',",
 						"     matchType:'exact',",
 						"     ignoreSpaces: false,",
 						"     broadcast: 'auto')~> join1",
