@@ -4,32 +4,36 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "datafactorypruebas199331"
 		},
 		"ADLS_datalakeudemylaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"ADLS_datalakeudemylaboratorio\""
 		},
 		"AzureSqlDatabase1_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+			"metadata": "Cadena protegida para \"password\"de \"AzureSqlDatabase1\""
+		},
+		"FileServer1_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"FileServer1\""
 		},
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LinkedServices_ADLS_DataLakeUdemyLaboratorio'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"LinkedServices_ADLS_DataLakeUdemyLaboratorio\""
 		},
 		"LinkedServices_ASQL_AWDW_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LinkedServices_ASQL_AWDW'"
+			"metadata": "Cadena protegida para \"password\"de \"LinkedServices_ASQL_AWDW\""
 		},
 		"LinkedServices_ASQL_AWDW2_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LinkedServices_ASQL_AWDW2'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_ASQL_AWDW2\""
 		},
 		"LinkedServices_StorageUdemyLaboratorio_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_StorageUdemyLaboratorio\""
 		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
@@ -46,6 +50,14 @@
 		"AzureSqlDatabase1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "christian"
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\Christian"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "Christian"
 		},
 		"HTTP_Rebrickable_properties_typeProperties_url": {
 			"type": "string",
@@ -69,11 +81,11 @@
 		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI to storage account containing linked ARM templates"
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Sas token to storage account containing linked ARM templates"
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
 		}
 	},
 	"variables": {
@@ -112,6 +124,9 @@
 					"LinkedServices_StorageUdemyLaboratorio_connectionString": {
 						"value": "[parameters('LinkedServices_StorageUdemyLaboratorio_connectionString')]"
 					},
+					"FileServer1_password": {
+						"value": "[parameters('FileServer1_password')]"
+					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
 					},
@@ -138,6 +153,12 @@
 					},
 					"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
 						"value": "[parameters('LinkedServices_ASQL_AWDW_properties_typeProperties_userName')]"
+					},
+					"FileServer1_properties_typeProperties_host": {
+						"value": "[parameters('FileServer1_properties_typeProperties_host')]"
+					},
+					"FileServer1_properties_typeProperties_userId": {
+						"value": "[parameters('FileServer1_properties_typeProperties_userId')]"
 					}
 				}
 			},

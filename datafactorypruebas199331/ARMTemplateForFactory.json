@@ -4,32 +4,36 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Data Factory name",
+			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "datafactorypruebas199331"
 		},
 		"ADLS_datalakeudemylaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"ADLS_datalakeudemylaboratorio\""
 		},
 		"AzureSqlDatabase1_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
+			"metadata": "Cadena protegida para \"password\"de \"AzureSqlDatabase1\""
+		},
+		"FileServer1_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"FileServer1\""
 		},
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LinkedServices_ADLS_DataLakeUdemyLaboratorio'"
+			"metadata": "Cadena protegida para \"accountKey\"de \"LinkedServices_ADLS_DataLakeUdemyLaboratorio\""
 		},
 		"LinkedServices_ASQL_AWDW_password": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'LinkedServices_ASQL_AWDW'"
+			"metadata": "Cadena protegida para \"password\"de \"LinkedServices_ASQL_AWDW\""
 		},
 		"LinkedServices_ASQL_AWDW2_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LinkedServices_ASQL_AWDW2'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_ASQL_AWDW2\""
 		},
 		"LinkedServices_StorageUdemyLaboratorio_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
+			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_StorageUdemyLaboratorio\""
 		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
@@ -46,6 +50,14 @@
 		"AzureSqlDatabase1_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "christian"
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"type": "string",
+			"defaultValue": "C:\\Users\\Christian"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"type": "string",
+			"defaultValue": "Christian"
 		},
 		"HTTP_Rebrickable_properties_typeProperties_url": {
 			"type": "string",
@@ -273,6 +285,57 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/5-Exists')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/6-Union')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Union",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "6-Union",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceMovie1": {},
+									"sourceMovie2": {},
+									"sourceMovie3": {},
+									"sinkMovie": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/6-Union')]"
 			]
 		},
 		{
@@ -1233,6 +1296,30 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/FileServer1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "FileServer",
+				"typeProperties": {
+					"host": "[parameters('FileServer1_properties_typeProperties_host')]",
+					"userId": "[parameters('FileServer1_properties_typeProperties_userId')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('FileServer1_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "integrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/HTTP_Rebrickable')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -1315,6 +1402,16 @@
 				"typeProperties": {
 					"connectionString": "[parameters('LinkedServices_StorageUdemyLaboratorio_connectionString')]"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/integrationRuntime1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
 			},
 			"dependsOn": []
 		},
@@ -1912,6 +2009,112 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> ClienteNotExists"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/6-Union')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceMovie1"
+						},
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceMovie2"
+						},
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceMovie3"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkMovie"
+						}
+					],
+					"transformations": [
+						{
+							"name": "union1"
+						},
+						{
+							"name": "union2"
+						}
+					],
+					"scriptLines": [
+						"source(useSchema: false,",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '6.Union',",
+						"     fileName: 'DataSetMovie1.csv',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true) ~> sourceMovie1",
+						"source(useSchema: false,",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '6.Union',",
+						"     fileName: 'DataSetMovie2.csv',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: false) ~> sourceMovie2",
+						"source(useSchema: false,",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '6.Union',",
+						"     fileName: 'DataSetMovie3.csv',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: false) ~> sourceMovie3",
+						"sourceMovie1, sourceMovie2 union(byName: false)~> union1",
+						"union1, sourceMovie3 union(byName: true)~> union2",
+						"union2 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '6.Union',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['Movie.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkMovie"
 					]
 				}
 			},

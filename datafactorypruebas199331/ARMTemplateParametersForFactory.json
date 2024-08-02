@@ -11,6 +11,9 @@
 		"AzureSqlDatabase1_password": {
 			"value": ""
 		},
+		"FileServer1_password": {
+			"value": ""
+		},
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 			"value": ""
 		},
@@ -34,6 +37,12 @@
 		},
 		"AzureSqlDatabase1_properties_typeProperties_userName": {
 			"value": "christian"
+		},
+		"FileServer1_properties_typeProperties_host": {
+			"value": "C:\\Users\\Christian"
+		},
+		"FileServer1_properties_typeProperties_userId": {
+			"value": "Christian"
 		},
 		"HTTP_Rebrickable_properties_typeProperties_url": {
 			"value": "https://cdn.rebrickable.com/media/downloads/"
