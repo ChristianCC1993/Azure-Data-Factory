@@ -85,10 +85,9 @@
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '',",
 				"     columnNamesAsHeader: true,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['ReporteCliente.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     header: (ReporteCliente.csv),",
 				"     partitionBy('hash', 1)) ~> sinkCliente"
 			]
 		}
