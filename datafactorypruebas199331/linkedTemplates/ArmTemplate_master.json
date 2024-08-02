@@ -4,36 +4,36 @@
 	"parameters": {
 		"factoryName": {
 			"type": "string",
-			"metadata": "Nombre de instancia de Data Factory",
+			"metadata": "Data Factory name",
 			"defaultValue": "datafactorypruebas199331"
 		},
 		"ADLS_datalakeudemylaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"accountKey\"de \"ADLS_datalakeudemylaboratorio\""
+			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
 		},
 		"AzureSqlDatabase1_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"AzureSqlDatabase1\""
+			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
 		},
 		"FileServer1_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"FileServer1\""
+			"metadata": "Secure string for 'password' of 'FileServer1'"
 		},
 		"LinkedServices_ADLS_DataLakeUdemyLaboratorio_accountKey": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"accountKey\"de \"LinkedServices_ADLS_DataLakeUdemyLaboratorio\""
+			"metadata": "Secure string for 'accountKey' of 'LinkedServices_ADLS_DataLakeUdemyLaboratorio'"
 		},
 		"LinkedServices_ASQL_AWDW_password": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"password\"de \"LinkedServices_ASQL_AWDW\""
+			"metadata": "Secure string for 'password' of 'LinkedServices_ASQL_AWDW'"
 		},
 		"LinkedServices_ASQL_AWDW2_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_ASQL_AWDW2\""
+			"metadata": "Secure string for 'connectionString' of 'LinkedServices_ASQL_AWDW2'"
 		},
 		"LinkedServices_StorageUdemyLaboratorio_connectionString": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"LinkedServices_StorageUdemyLaboratorio\""
+			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
 		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
@@ -81,11 +81,11 @@
 		},
 		"containerUri": {
 			"type": "string",
-			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+			"metadata": "URI to storage account containing linked ARM templates"
 		},
 		"containerSasToken": {
 			"type": "string",
-			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+			"metadata": "Sas token to storage account containing linked ARM templates"
 		}
 	},
 	"variables": {
