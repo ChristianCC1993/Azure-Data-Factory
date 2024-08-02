@@ -226,7 +226,7 @@
 						"     format: 'delimited',",
 						"     container: 'dataflowdataset',",
 						"     folderPath: '6.Union',",
-						"     columnDelimiter: ',',",
+						"     columnDelimiter: ';',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '\\\"',",
 						"     columnNamesAsHeader: true,",
