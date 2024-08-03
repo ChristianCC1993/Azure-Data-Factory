@@ -24,6 +24,9 @@
 			"transformations": [
 				{
 					"name": "derivedColumn"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -42,11 +45,18 @@
 				"sourceCategoriaProducto derive(CATEGORIA = upper(Categoria),",
 				"          Producto = upper(Producto),",
 				"          {monto Total} = toDecimal(UnitPrice-UnitPriceDiscount)) ~> derivedColumn",
-				"derivedColumn sink(allowSchemaDrift: true,",
+				"derivedColumn select(mapColumn(",
+				"          Producto,",
+				"          categoria = derivedColumn@CATEGORIA,",
+				"          {monto Total}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     format: 'delimited',",
 				"     container: 'dataflowdataset',",
-				"     folderPath: '8.Derived Column',",
+				"     folderPath: '9.Select',",
 				"     columnDelimiter: ';',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '',",
