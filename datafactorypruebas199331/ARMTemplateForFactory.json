@@ -85,6 +85,104 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Nuestro Primer Data Flow",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "1-Primer Data Flow",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceCustomer": {},
+									"sinkCustomer": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/1-Primer Data Flow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/10-Aggregate')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "10-Aggregate",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"sourceCategoriaProducto": {},
+									"sinkCategoriaProducto": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/10-Aggregate')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/2-New Branch')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -713,55 +811,6 @@
 				"[concat(variables('factoryId'), '/datasets/SourceDataset_5fx')]",
 				"[concat(variables('factoryId'), '/datasets/ADSL_Lego_Themes')]",
 				"[concat(variables('factoryId'), '/linkedServices/ADLS_datalakeudemylaboratorio')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Primer_Data_Flow')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Nuestro Primer Data Flow",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "1-Primer Data Flow",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceCustomer": {},
-									"sinkCustomer": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "3. DataFlow"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/1-Primer Data Flow')]"
 			]
 		},
 		{
@@ -1574,6 +1623,93 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ASQL_AWDW_Customer')]",
 				"[concat(variables('factoryId'), '/datasets/ABS_StorageUdemyLboratorio_Customer')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/10-Aggregate')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceCategoriaProducto"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkCategoriaProducto"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Categoria as string,",
+						"          Producto as string,",
+						"          UnitPrice as decimal(19,4),",
+						"          UnitPriceDiscount as decimal(19,4)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'SELECT PC.Name Categoria, P.Name Producto, OD.UnitPrice, OD.UnitPriceDiscount\\nFROM [SalesLT].[ProductCategory] AS PC\\n     INNER JOIN [SalesLT].[Product] AS P ON P.ProductCategoryID=PC.ProductCategoryID\\n     INNER JOIN [SalesLT].[SalesOrderDetail] AS OD ON OD.ProductID=P.ProductID',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceCategoriaProducto",
+						"sourceCategoriaProducto derive(CATEGORIA = upper(Categoria),",
+						"          Producto = upper(Producto),",
+						"          {monto Total} = toDecimal(UnitPrice-UnitPriceDiscount)) ~> derivedColumn",
+						"derivedColumn select(mapColumn(",
+						"          Producto,",
+						"          categoria = derivedColumn@CATEGORIA,",
+						"          {monto Total}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 aggregate(groupBy(Producto,",
+						"          categoria),",
+						"     suma = sum({monto Total}),",
+						"          {máximo} = max({monto Total}),",
+						"          minimo = min({monto Total}),",
+						"          promedio = toDecimal(avg({monto Total})),",
+						"          cantidad = count({monto Total})) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '10.Agregate',",
+						"     columnDelimiter: ';',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ProductoCategoria.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkCategoriaProducto"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
 			]
 		},
 		{
@@ -2399,7 +2535,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/10-')]",
+			"name": "[concat(parameters('factoryName'), '/11-Surrogate')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -2429,6 +2565,9 @@
 						},
 						{
 							"name": "select1"
+						},
+						{
+							"name": "aggregate1"
 						}
 					],
 					"scriptLines": [
@@ -2454,11 +2593,18 @@
 						"     ),",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true) ~> select1",
-						"select1 sink(allowSchemaDrift: true,",
+						"select1 aggregate(groupBy(Producto,",
+						"          categoria),",
+						"     suma = sum({monto Total}),",
+						"          {máximo} = max({monto Total}),",
+						"          minimo = min({monto Total}),",
+						"          promedio = toDecimal(avg({monto Total})),",
+						"          cantidad = count({monto Total})) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'delimited',",
 						"     container: 'dataflowdataset',",
-						"     folderPath: '9.Select',",
+						"     folderPath: '10.Agregate',",
 						"     columnDelimiter: ';',",
 						"     escapeChar: '\\\\',",
 						"     quoteChar: '',",

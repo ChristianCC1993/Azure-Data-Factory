@@ -708,6 +708,93 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/10-Aggregate')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceCategoriaProducto"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkCategoriaProducto"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "aggregate1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Categoria as string,",
+						"          Producto as string,",
+						"          UnitPrice as decimal(19,4),",
+						"          UnitPriceDiscount as decimal(19,4)",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'query',",
+						"     store: 'sqlserver',",
+						"     query: 'SELECT PC.Name Categoria, P.Name Producto, OD.UnitPrice, OD.UnitPriceDiscount\\nFROM [SalesLT].[ProductCategory] AS PC\\n     INNER JOIN [SalesLT].[Product] AS P ON P.ProductCategoryID=PC.ProductCategoryID\\n     INNER JOIN [SalesLT].[SalesOrderDetail] AS OD ON OD.ProductID=P.ProductID',",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceCategoriaProducto",
+						"sourceCategoriaProducto derive(CATEGORIA = upper(Categoria),",
+						"          Producto = upper(Producto),",
+						"          {monto Total} = toDecimal(UnitPrice-UnitPriceDiscount)) ~> derivedColumn",
+						"derivedColumn select(mapColumn(",
+						"          Producto,",
+						"          categoria = derivedColumn@CATEGORIA,",
+						"          {monto Total}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 aggregate(groupBy(Producto,",
+						"          categoria),",
+						"     suma = sum({monto Total}),",
+						"          {máximo} = max({monto Total}),",
+						"          minimo = min({monto Total}),",
+						"          promedio = toDecimal(avg({monto Total})),",
+						"          cantidad = count({monto Total})) ~> aggregate1",
+						"aggregate1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '10.Agregate',",
+						"     columnDelimiter: ';',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ProductoCategoria.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkCategoriaProducto"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/2-New Branch')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -916,208 +1003,6 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/4-Conditional Split')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_ASQL_AWDW2",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sourceProduct"
-						}
-					],
-					"sinks": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkProductRed"
-						},
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkProductBlue"
-						},
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkProductBlack"
-						},
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkOtros"
-						}
-					],
-					"transformations": [
-						{
-							"name": "ConditionalSplitProduct"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ProductID as integer,",
-						"          Name as string,",
-						"          ProductNumber as string,",
-						"          Color as string,",
-						"          StandardCost as decimal(19,4),",
-						"          ListPrice as decimal(19,4),",
-						"          Size as string,",
-						"          Weight as decimal(8,2),",
-						"          ProductCategoryID as integer,",
-						"          ProductModelID as integer,",
-						"          SellStartDate as timestamp,",
-						"          SellEndDate as timestamp,",
-						"          DiscontinuedDate as timestamp,",
-						"          ThumbNailPhoto as binary,",
-						"          ThumbnailPhotoFileName as string,",
-						"          rowguid as string,",
-						"          ModifiedDate as timestamp",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'table',",
-						"     store: 'sqlserver',",
-						"     schemaName: 'SalesLT',",
-						"     tableName: 'Product',",
-						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceProduct",
-						"sourceProduct split(Color==\"Red\",",
-						"     Color==\"Blue\",",
-						"     Color==\"Black\",",
-						"     disjoint: false) ~> ConditionalSplitProduct@(Red, Blue, Black, Otros)",
-						"ConditionalSplitProduct@Red sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'delimited',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '4.Condicional Split',",
-						"     columnDelimiter: ';',",
-						"     escapeChar: '\\\\',",
-						"     quoteChar: '\\\"',",
-						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['ProductRed.csv'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     mapColumn(",
-						"          ProductID,",
-						"          Name,",
-						"          ProductNumber,",
-						"          Color,",
-						"          StandardCost,",
-						"          ListPrice,",
-						"          Size,",
-						"          Weight,",
-						"          ProductCategoryID,",
-						"          ProductModelID,",
-						"          SellStartDate,",
-						"          SellEndDate,",
-						"          DiscontinuedDate",
-						"     ),",
-						"     partitionBy('hash', 1)) ~> sinkProductRed",
-						"ConditionalSplitProduct@Blue sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'delimited',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '4.Condicional Split',",
-						"     columnDelimiter: ';',",
-						"     escapeChar: '\\\\',",
-						"     quoteChar: '\\\"',",
-						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['ProductBlue.csv'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     mapColumn(",
-						"          ProductID,",
-						"          Name,",
-						"          ProductNumber,",
-						"          Color,",
-						"          StandardCost,",
-						"          ListPrice,",
-						"          Size,",
-						"          Weight,",
-						"          ProductCategoryID,",
-						"          ProductModelID,",
-						"          SellStartDate,",
-						"          SellEndDate,",
-						"          DiscontinuedDate",
-						"     ),",
-						"     partitionBy('hash', 1)) ~> sinkProductBlue",
-						"ConditionalSplitProduct@Black sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'delimited',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '4.Condicional Split',",
-						"     columnDelimiter: ';',",
-						"     escapeChar: '\\\\',",
-						"     quoteChar: '\\\"',",
-						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['ProductBlack.csv'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     mapColumn(",
-						"          ProductID,",
-						"          Name,",
-						"          ProductNumber,",
-						"          Color,",
-						"          StandardCost,",
-						"          ListPrice,",
-						"          Size,",
-						"          Weight,",
-						"          ProductCategoryID,",
-						"          ProductModelID,",
-						"          SellStartDate,",
-						"          SellEndDate,",
-						"          DiscontinuedDate",
-						"     ),",
-						"     partitionBy('hash', 1)) ~> sinkProductBlack",
-						"ConditionalSplitProduct@Otros sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'delimited',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '4.Condicional Split',",
-						"     columnDelimiter: ';',",
-						"     escapeChar: '\\\\',",
-						"     quoteChar: '\\\"',",
-						"     columnNamesAsHeader: true,",
-						"     partitionFileNames:['ProductOtros.csv'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     mapColumn(",
-						"          ProductID,",
-						"          Name,",
-						"          ProductNumber,",
-						"          Color,",
-						"          StandardCost,",
-						"          ListPrice,",
-						"          Size,",
-						"          Weight,",
-						"          ProductCategoryID,",
-						"          ProductModelID,",
-						"          SellStartDate,",
-						"          SellEndDate,",
-						"          DiscontinuedDate",
-						"     ),",
-						"     partitionBy('hash', 1)) ~> sinkOtros"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]",
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
 			]
 		}
