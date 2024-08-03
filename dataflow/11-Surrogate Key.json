@@ -95,6 +95,16 @@
 				"     partitionFileNames:['ProductoCategoria.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          ID,",
+				"          Producto,",
+				"          categoria,",
+				"          suma,",
+				"          {máximo},",
+				"          minimo,",
+				"          promedio,",
+				"          cantidad",
+				"     ),",
 				"     partitionBy('hash', 1)) ~> sinkCategoriaProducto"
 			]
 		}
