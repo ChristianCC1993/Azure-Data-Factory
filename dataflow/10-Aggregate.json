@@ -1,5 +1,5 @@
 {
-	"name": "10-Agregate",
+	"name": "10-Aggregate",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
