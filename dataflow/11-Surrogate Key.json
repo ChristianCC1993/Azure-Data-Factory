@@ -88,7 +88,7 @@
 				"     format: 'delimited',",
 				"     container: 'dataflowdataset',",
 				"     folderPath: '11.SurrogateKey',",
-				"     columnDelimiter: ';',",
+				"     columnDelimiter: ',',",
 				"     escapeChar: '\\\\',",
 				"     quoteChar: '',",
 				"     columnNamesAsHeader: true,",
