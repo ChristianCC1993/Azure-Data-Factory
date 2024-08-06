@@ -756,7 +756,7 @@
 						"          {Cantidad (Kg)},",
 						"          {Año}),",
 						"     pivotBy(Pais),",
-						"     {} = sum({Cantidad (Kg)}),",
+						"     {} = sum({Precio(kg)}),",
 						"     columnNaming: 'ventas$N_$V(kg)',",
 						"     lateral: true) ~> pivot1",
 						"pivot1 sink(allowSchemaDrift: true,",
@@ -772,6 +772,108 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/13-UnPivot')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceDataExportacion"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkDataExportacion"
+						}
+					],
+					"transformations": [
+						{
+							"name": "unpivot"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Empresas as string,",
+						"          Frutas as string,",
+						"          Cliente as string,",
+						"          {Cantidad (Kg)} as short,",
+						"          {Año} as short,",
+						"          {Ventas EE.UU. KG} as short,",
+						"          {Ventas China KG} as short,",
+						"          {Ventas España KG} as short,",
+						"          {Ventas Francia KG} as short,",
+						"          {Ventas Canada KG} as short",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '13.UnPivot',",
+						"     fileName: 'DataExportacionNoEstructurada.xlsx',",
+						"     sheetName: 'Data Exportacion',",
+						"     firstRowAsHeader: true) ~> sourceDataExportacion",
+						"sourceDataExportacion unpivot(output(",
+						"          Pais as string,",
+						"          {Precio(Kg)} as short",
+						"     ),",
+						"     ungroupBy(Empresas,",
+						"          Frutas,",
+						"          Cliente,",
+						"          {Cantidad (Kg)},",
+						"          {Año}),",
+						"     pivotValues: ['Ventas EE.UU. KG', 'Ventas China KG', 'Ventas España KG', 'Ventas Francia KG', 'Ventas Canada KG'],",
+						"     lateral: true,",
+						"     ignoreNullPivots: true) ~> unpivot",
+						"unpivot derive(Posicion1 = instr(Pais,' '),",
+						"          Posicion2 = instr(Pais,' KG'),",
+						"          PAIS = substring(Pais,instr(Pais, ' '),instr(Pais, ' KG')-instr(Pais, ' '))) ~> derivedColumn1",
+						"derivedColumn1 select(mapColumn(",
+						"          Empresas,",
+						"          Frutas,",
+						"          Cliente,",
+						"          {Cantidad (Kg)},",
+						"          {Año},",
+						"          Pais = derivedColumn1@PAIS,",
+						"          {Precio(Kg)}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '13.UnPivot',",
+						"     columnDelimiter: ';',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['DataExxportacion-UnPivot.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkDataExportacion"
 					]
 				}
 			},
@@ -1537,130 +1639,6 @@
 				},
 				"folder": {
 					"name": "1. Ingesta"
-				},
-				"annotations": []
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Table_copy_ASQL_ADLS')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy_Table_ASQL_ADLS",
-						"type": "Copy",
-						"dependsOn": [
-							{
-								"activity": "Set variable FileName",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "AzureSqlSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ASQL_AWDW_Table",
-								"type": "DatasetReference",
-								"parameters": {
-									"dataBaseName": {
-										"value": "@pipeline().parameters.DataBaseName",
-										"type": "Expression"
-									},
-									"TableName": {
-										"value": "@pipeline().parameters.TableName",
-										"type": "Expression"
-									}
-								}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "ADLS_DataLakeUdemyLaboratorio_Table",
-								"type": "DatasetReference",
-								"parameters": {
-									"TableName": {
-										"value": "@variables('FileName')",
-										"type": "Expression"
-									}
-								}
-							}
-						]
-					},
-					{
-						"name": "Set variable FileName",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"policy": {
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "FileName",
-							"value": {
-								"value": "@concat(\n    pipeline().parameters.TableName, \n    '-',\n    formatDateTime(utcnow(), 'yyyyMMdd'),\n    '.csv'\n)",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"parameters": {
-					"DataBaseName": {
-						"type": "string",
-						"defaultValue": "azureAdventureWorksDW"
-					},
-					"TableName": {
-						"type": "String",
-						"defaultValue": "Customer"
-					}
-				},
-				"variables": {
-					"FileName": {
-						"type": "String"
-					}
-				},
-				"folder": {
-					"name": "2. Move and Transform Activities"
 				},
 				"annotations": []
 			},
