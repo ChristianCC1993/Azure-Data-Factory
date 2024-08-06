@@ -1,0 +1,155 @@
+{
+	"name": "16-Flattern",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceJsonDocumentoPorLinea"
+				},
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceJsonDocumentoUnico"
+				},
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceJsonMatriz"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_ASQL_AWDW2",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkAutomovil"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flatten"
+				},
+				{
+					"name": "flattenModelo"
+				},
+				{
+					"name": "unionJson1"
+				},
+				{
+					"name": "selectJson"
+				},
+				{
+					"name": "unionJson2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Color as string,",
+				"          Contacto as (Email as string, Telefono as string),",
+				"          Empresa as string,",
+				"          Id as string,",
+				"          Modelo as string",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'json',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '16.Flatten',",
+				"     fileName: 'AutomovilDocumentoPorLinea.json',",
+				"     documentForm: 'documentPerLine') ~> sourceJsonDocumentoPorLinea",
+				"source(output(",
+				"          Color as string,",
+				"          Contacto as (Email as string, Telefono as string),",
+				"          Empresa as string,",
+				"          Id as string,",
+				"          Modelo as string",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'json',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '16.Flatten',",
+				"     fileName: 'AutomovilDocumentoUnico.json',",
+				"     documentForm: 'singleDocument') ~> sourceJsonDocumentoUnico",
+				"source(output(",
+				"          Color as string[],",
+				"          Contacto as (Email as string, Telefono as string),",
+				"          Empresa as string,",
+				"          Id as string,",
+				"          Modelo as string[]",
+				"     ),",
+				"     useSchema: false,",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'json',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '16.Flatten',",
+				"     fileName: 'AutomovilMatriz.json',",
+				"     documentForm: 'arrayOfDocuments') ~> sourceJsonMatriz",
+				"sourceJsonMatriz foldDown(unroll(Color, Color),",
+				"     mapColumn(",
+				"          Color = Color,",
+				"          Email = Contacto.Email,",
+				"          Telefono = Contacto.Telefono,",
+				"          Empresa,",
+				"          Id,",
+				"          Modelo",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten",
+				"flatten foldDown(unroll(Modelo, Modelo),",
+				"     mapColumn(",
+				"          Color,",
+				"          Email,",
+				"          Telefono,",
+				"          Empresa,",
+				"          Id,",
+				"          Modelo",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flattenModelo",
+				"sourceJsonDocumentoPorLinea, sourceJsonDocumentoUnico union(byName: true)~> unionJson1",
+				"unionJson1 select(mapColumn(",
+				"          Color,",
+				"          Email = Contacto.Email,",
+				"          Telefono = Contacto.Telefono,",
+				"          Empresa,",
+				"          Id,",
+				"          Modelo",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectJson",
+				"selectJson, flattenModelo union(byName: true)~> unionJson2",
+				"unionJson2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'sqlserver',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'Automovil',",
+				"     preSQLs:['Truncate table Automovil'],",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkAutomovil"
+			]
+		}
+	}
+}
