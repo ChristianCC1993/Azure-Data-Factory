@@ -479,6 +479,153 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/17-Parse')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Parse",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "17-Parse",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sinkEmpledo": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/17-Parse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/18-Filter')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Filter",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "18-Filter",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sinkEmpledo": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/18-Filter')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/19-sort')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow Sort",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "19-Sort",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sinkEmpledo": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "3. DataFlow"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/19-Sort')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/2-New Branch')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -2614,6 +2761,380 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError') ~> sinkAutomovil"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/17-Parse')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkEmpledo"
+						}
+					],
+					"transformations": [
+						{
+							"name": "parseNombre"
+						},
+						{
+							"name": "parseJson"
+						},
+						{
+							"name": "parseXML"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as short,",
+						"          Nombre as string,",
+						"          JsonValue as string,",
+						"          XmlValue as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '17.Parse',",
+						"     fileName: 'Empleado.xlsx',",
+						"     sheetName: 'Data',",
+						"     firstRowAsHeader: true) ~> source1",
+						"source1 parse(NombreOutput = Nombre ? (Nombre as string,",
+						"          Apellido as string),",
+						"     format: 'delimited',",
+						"     columnNamesAsHeader: false,",
+						"     columnDelimiter: '|',",
+						"     nullValue: '') ~> parseNombre",
+						"parseNombre parse(JsonOutput = JsonValue ? (Cargo as string,",
+						"          FechaContratacion as date,",
+						"          FechaCumpleanio as date),",
+						"     format: 'json',",
+						"     documentForm: 'singleDocument') ~> parseJson",
+						"parseJson parse(xmlOutput = XmlValue ? (Empleado as (Email as string,",
+						"          Telefono as string,",
+						"          ContactoEmergencia as string,",
+						"          ContactoEmergenciaTelefono as string)),",
+						"     format: 'xml',",
+						"     namespaces: true) ~> parseXML",
+						"parseXML select(mapColumn(",
+						"          ID,",
+						"          Nombre = NombreOutput.Nombre,",
+						"          Apellido = NombreOutput.Apellido,",
+						"          Cargo = JsonOutput.Cargo,",
+						"          FechaContratacion = JsonOutput.FechaContratacion,",
+						"          FechaCumpleanio = JsonOutput.FechaCumpleanio,",
+						"          Email = xmlOutput.Empleado.Email,",
+						"          Telefono = xmlOutput.Empleado.Telefono,",
+						"          ContactoEmergencia = xmlOutput.Empleado.ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono = xmlOutput.Empleado.ContactoEmergenciaTelefono",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'sqlserver',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Empleado',",
+						"     preSQLs:['truncate table Empleado'],",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          Nombre,",
+						"          Apellido,",
+						"          Cargo,",
+						"          FechaContratacion,",
+						"          FechaCumpleanio,",
+						"          Email,",
+						"          Telefono,",
+						"          ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono",
+						"     )) ~> sinkEmpledo"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/18-Filter')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkEmpledo"
+						}
+					],
+					"transformations": [
+						{
+							"name": "parseNombre"
+						},
+						{
+							"name": "parseJson"
+						},
+						{
+							"name": "parseXML"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "filter",
+							"description": "year(FechaContratacion)>2007"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as short,",
+						"          Nombre as string,",
+						"          JsonValue as string,",
+						"          XmlValue as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '17.Parse',",
+						"     fileName: 'Empleado.xlsx',",
+						"     sheetName: 'Data',",
+						"     firstRowAsHeader: true) ~> source1",
+						"source1 parse(NombreOutput = Nombre ? (Nombre as string,",
+						"          Apellido as string),",
+						"     format: 'delimited',",
+						"     columnNamesAsHeader: false,",
+						"     columnDelimiter: '|',",
+						"     nullValue: '') ~> parseNombre",
+						"parseNombre parse(JsonOutput = JsonValue ? (Cargo as string,",
+						"          FechaContratacion as date,",
+						"          FechaCumpleanio as date),",
+						"     format: 'json',",
+						"     documentForm: 'singleDocument') ~> parseJson",
+						"parseJson parse(xmlOutput = XmlValue ? (Empleado as (Email as string,",
+						"          Telefono as string,",
+						"          ContactoEmergencia as string,",
+						"          ContactoEmergenciaTelefono as string)),",
+						"     format: 'xml',",
+						"     namespaces: true) ~> parseXML",
+						"parseXML select(mapColumn(",
+						"          ID,",
+						"          Nombre = NombreOutput.Nombre,",
+						"          Apellido = NombreOutput.Apellido,",
+						"          Cargo = JsonOutput.Cargo,",
+						"          FechaContratacion = JsonOutput.FechaContratacion,",
+						"          FechaCumpleanio = JsonOutput.FechaCumpleanio,",
+						"          Email = xmlOutput.Empleado.Email,",
+						"          Telefono = xmlOutput.Empleado.Telefono,",
+						"          ContactoEmergencia = xmlOutput.Empleado.ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono = xmlOutput.Empleado.ContactoEmergenciaTelefono",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 filter(year(FechaContratacion)>2007) ~> filter",
+						"filter sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'sqlserver',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Empleado',",
+						"     preSQLs:['truncate table Empleado'],",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          Nombre,",
+						"          Apellido,",
+						"          Cargo,",
+						"          FechaContratacion,",
+						"          FechaCumpleanio,",
+						"          Email,",
+						"          Telefono,",
+						"          ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono",
+						"     )) ~> sinkEmpledo"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]",
+				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/19-Sort')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkEmpledo"
+						}
+					],
+					"transformations": [
+						{
+							"name": "parseNombre"
+						},
+						{
+							"name": "parseJson"
+						},
+						{
+							"name": "parseXML"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "filter",
+							"description": "year(FechaContratacion)>2007"
+						},
+						{
+							"name": "sort"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as short,",
+						"          Nombre as string,",
+						"          JsonValue as string,",
+						"          XmlValue as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '17.Parse',",
+						"     fileName: 'Empleado.xlsx',",
+						"     sheetName: 'Data',",
+						"     firstRowAsHeader: true) ~> source1",
+						"source1 parse(NombreOutput = Nombre ? (Nombre as string,",
+						"          Apellido as string),",
+						"     format: 'delimited',",
+						"     columnNamesAsHeader: false,",
+						"     columnDelimiter: '|',",
+						"     nullValue: '') ~> parseNombre",
+						"parseNombre parse(JsonOutput = JsonValue ? (Cargo as string,",
+						"          FechaContratacion as date,",
+						"          FechaCumpleanio as date),",
+						"     format: 'json',",
+						"     documentForm: 'singleDocument') ~> parseJson",
+						"parseJson parse(xmlOutput = XmlValue ? (Empleado as (Email as string,",
+						"          Telefono as string,",
+						"          ContactoEmergencia as string,",
+						"          ContactoEmergenciaTelefono as string)),",
+						"     format: 'xml',",
+						"     namespaces: true) ~> parseXML",
+						"parseXML select(mapColumn(",
+						"          ID,",
+						"          Nombre = NombreOutput.Nombre,",
+						"          Apellido = NombreOutput.Apellido,",
+						"          Cargo = JsonOutput.Cargo,",
+						"          FechaContratacion = JsonOutput.FechaContratacion,",
+						"          FechaCumpleanio = JsonOutput.FechaCumpleanio,",
+						"          Email = xmlOutput.Empleado.Email,",
+						"          Telefono = xmlOutput.Empleado.Telefono,",
+						"          ContactoEmergencia = xmlOutput.Empleado.ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono = xmlOutput.Empleado.ContactoEmergenciaTelefono",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 filter(year(FechaContratacion)>2007) ~> filter",
+						"filter sort(asc(ID, true)) ~> sort",
+						"sort sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'sqlserver',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Empleado',",
+						"     preSQLs:['truncate table Empleado'],",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          Nombre,",
+						"          Apellido,",
+						"          Cargo,",
+						"          FechaContratacion,",
+						"          FechaCumpleanio,",
+						"          Email,",
+						"          Telefono,",
+						"          ContactoEmergencia,",
+						"          ContactoEmergenciaTelefono",
+						"     )) ~> sinkEmpledo"
 					]
 				}
 			},
