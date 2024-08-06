@@ -1,0 +1,99 @@
+{
+	"name": "13-UnPivot",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceDataExportacion"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkDataExportacion"
+				}
+			],
+			"transformations": [
+				{
+					"name": "unpivot"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Empresas as string,",
+				"          Frutas as string,",
+				"          Cliente as string,",
+				"          {Cantidad (Kg)} as short,",
+				"          {Año} as short,",
+				"          {Ventas EE.UU. KG} as short,",
+				"          {Ventas China KG} as short,",
+				"          {Ventas España KG} as short,",
+				"          {Ventas Francia KG} as short,",
+				"          {Ventas Canada KG} as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'excel',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '13.UnPivot',",
+				"     fileName: 'DataExportacionNoEstructurada.xlsx',",
+				"     sheetName: 'Data Exportacion',",
+				"     firstRowAsHeader: true) ~> sourceDataExportacion",
+				"sourceDataExportacion unpivot(output(",
+				"          Pais as string,",
+				"          {Precio(Kg)} as short",
+				"     ),",
+				"     ungroupBy(Empresas,",
+				"          Frutas,",
+				"          Cliente,",
+				"          {Cantidad (Kg)},",
+				"          {Año}),",
+				"     pivotValues: ['Ventas EE.UU. KG', 'Ventas China KG', 'Ventas España KG', 'Ventas Francia KG', 'Ventas Canada KG'],",
+				"     lateral: true,",
+				"     ignoreNullPivots: true) ~> unpivot",
+				"unpivot derive(Posicion1 = instr(Pais,' '),",
+				"          Posicion2 = instr(Pais,' KG'),",
+				"          PAIS = substring(Pais,instr(Pais, ' '),instr(Pais, ' KG')-instr(Pais, ' '))) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          Empresas,",
+				"          Frutas,",
+				"          Cliente,",
+				"          {Cantidad (Kg)},",
+				"          {Año},",
+				"          Pais = derivedColumn1@PAIS,",
+				"          {Precio(Kg)}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '13.UnPivot',",
+				"     columnDelimiter: ';',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['DataExxportacion-UnPivot.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkDataExportacion"
+			]
+		}
+	}
+}
