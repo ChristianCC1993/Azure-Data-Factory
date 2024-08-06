@@ -1,0 +1,67 @@
+{
+	"name": "14-Window",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_ASQL_AWDW2",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceProductocategoria"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkProductoCategoria"
+				}
+			],
+			"transformations": [
+				{
+					"name": "window"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          CategoriaID as integer,",
+				"          Categoria as string,",
+				"          Producto as string,",
+				"          UnitPrice as decimal(19,4),",
+				"          Cantidad as integer,",
+				"          Total as decimal(19,4)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'query',",
+				"     store: 'sqlserver',",
+				"     query: 'SELECT PC.ProductCategoryID CategoriaID, PC.Name Categoria, P.Name Producto, OD.UnitPrice, 100 Cantidad,\\n     (OD.UnitPrice*100) Total\\nFROM [SalesLT].[ProductCategory] AS PC\\n     INNER JOIN [SalesLT].[Product] AS P ON P.ProductCategoryID=PC.ProductCategoryID\\n     INNER JOIN [SalesLT].[SalesOrderDetail] AS OD ON OD.ProductID=P.ProductID',",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceProductocategoria",
+				"sourceProductocategoria window(over(CategoriaID),",
+				"     asc(CategoriaID, true),",
+				"     SUM = toDecimal(sum(UnitPrice*Cantidad)),",
+				"          AVG = toDecimal(avg(UnitPrice*Cantidad)),",
+				"          COUNT = count(UnitPrice*Cantidad),",
+				"          MAX = toDecimal(max(UnitPrice*Cantidad)),",
+				"          MIN = toDecimal(min(UnitPrice*Cantidad))) ~> window",
+				"window sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '14.Window',",
+				"     columnDelimiter: ';',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['Productocategoria.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkProductoCategoria"
+			]
+		}
+	}
+}
