@@ -51,7 +51,7 @@
 				"          {Cantidad (Kg)},",
 				"          {Año}),",
 				"     pivotBy(Pais),",
-				"     {} = sum({Cantidad (Kg)}),",
+				"     {} = sum({Precio(kg)}),",
 				"     columnNaming: 'ventas$N_$V(kg)',",
 				"     lateral: true) ~> pivot1",
 				"pivot1 sink(allowSchemaDrift: true,",
