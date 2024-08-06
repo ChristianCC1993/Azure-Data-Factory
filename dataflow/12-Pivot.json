@@ -9,14 +9,7 @@
 						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sourceDataExportacion"
-				},
-				{
-					"linkedService": {
-						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-						"type": "LinkedServiceReference"
-					},
-					"name": "sourceDataExportacion1"
+					"name": "source"
 				}
 			],
 			"sinks": [
@@ -25,7 +18,7 @@
 						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
 						"type": "LinkedServiceReference"
 					},
-					"name": "sinkDataExportacionPivot"
+					"name": "sink1"
 				}
 			],
 			"transformations": [
@@ -51,33 +44,15 @@
 				"     folderPath: '12.Pivot',",
 				"     fileName: 'DataExportacionEstructurado.xlsx',",
 				"     sheetName: 'Data',",
-				"     firstRowAsHeader: true) ~> sourceDataExportacion",
-				"source(output(",
-				"          Empresas as string,",
-				"          Frutas as string,",
-				"          Cliente as string,",
-				"          {Cantidad (Kg)} as short,",
-				"          {Año} as short,",
-				"          Pais as string,",
-				"          {Precio(kg)} as short",
-				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false,",
-				"     format: 'excel',",
-				"     container: 'dataflowdataset',",
-				"     folderPath: '12.Pivot',",
-				"     fileName: 'DataExportacionEstructurado.xlsx',",
-				"     sheetName: 'Data',",
-				"     firstRowAsHeader: true) ~> sourceDataExportacion1",
-				"sourceDataExportacion1 pivot(groupBy(Empresas,",
+				"     firstRowAsHeader: true) ~> source",
+				"source pivot(groupBy(Empresas,",
 				"          Frutas,",
 				"          Cliente,",
 				"          {Cantidad (Kg)},",
 				"          {Año}),",
 				"     pivotBy(Pais),",
-				"     {} = sum({Precio(kg)}),",
-				"     columnNaming: 'Ventas$N_$V(KG)',",
+				"     {} = sum({Cantidad (Kg)}),",
+				"     columnNaming: 'ventas$N_$V(kg)',",
 				"     lateral: true) ~> pivot1",
 				"pivot1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -91,7 +66,7 @@
 				"     partitionFileNames:['DataExportacionPivot.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sinkDataExportacionPivot"
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
