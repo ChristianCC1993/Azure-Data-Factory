@@ -3588,6 +3588,9 @@
 					"transformations": [
 						{
 							"name": "alterRow1"
+						},
+						{
+							"name": "derivedColumn1"
 						}
 					],
 					"scriptLines": [
@@ -3610,15 +3613,17 @@
 						"     schemaName: 'dbo',",
 						"     tableName: 'Empleado',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceEmpleado",
-						"sourceEmpleado alterRow(deleteIf(Cargo=='Production Technician - WC40')) ~> alterRow1",
-						"alterRow1 sink(allowSchemaDrift: true,",
+						"sourceEmpleado alterRow(deleteIf(Cargo=='Production Technician - WC40'),",
+						"     updateIf(Cargo=='Production Technician - WC45')) ~> alterRow1",
+						"alterRow1 derive(Cargo = 'REPRESENTANTE DE VENTA') ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'table',",
 						"     store: 'sqlserver',",
 						"     schemaName: 'dbo',",
 						"     tableName: 'Empleado',",
 						"     insertable: false,",
-						"     updateable: false,",
+						"     updateable: true,",
 						"     deletable: true,",
 						"     upsertable: false,",
 						"     keys:['ID'],",
