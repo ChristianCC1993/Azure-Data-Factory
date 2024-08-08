@@ -902,6 +902,78 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/20-1-D')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceEmpleadoNuevo"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "alterRow"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as short,",
+						"          Nombre as string,",
+						"          Apellido as string,",
+						"          Cargo as string,",
+						"          FechaContratacion as date,",
+						"          FechaCumpleanio as date,",
+						"          Email as string,",
+						"          Telefono as string,",
+						"          ContactoEmergencia as string,",
+						"          ContactoEmergenciaTelefono as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'excel',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '20.AlterRow',",
+						"     fileName: 'EmpleadoNuevo.xlsx',",
+						"     sheetName: 'Data',",
+						"     firstRowAsHeader: true) ~> sourceEmpleadoNuevo",
+						"sourceEmpleadoNuevo alterRow(insertIf(year(FechaContratacion)==2007),",
+						"     deleteIf(true())) ~> alterRow",
+						"alterRow sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'table',",
+						"     store: 'sqlserver',",
+						"     schemaName: 'dbo',",
+						"     tableName: 'Empleado',",
+						"     insertable: true,",
+						"     updateable: false,",
+						"     deletable: false,",
+						"     upsertable: false,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/20-Alter Row')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -1848,55 +1920,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/13-UnPivot')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/14-Window')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow Window",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "14-Window",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"sourceProductocategoria": {},
-									"sinkProductoCategoria": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"folder": {
-					"name": "3. DataFlow"
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/14-Window')]"
 			]
 		}
 	]
