@@ -1,0 +1,47 @@
+{
+	"name": "21-Parameter",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow Parameter",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "21-Parameter",
+						"type": "DataFlowReference",
+						"parameters": {
+							"Cargo": {
+								"value": "'@{pipeline().parameters.Cargo}'",
+								"type": "Expression"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"Cargo": {
+				"type": "String",
+				"defaultValue": "Network Administrator"
+			}
+		},
+		"folder": {
+			"name": "3. DataFlow"
+		},
+		"annotations": []
+	}
+}

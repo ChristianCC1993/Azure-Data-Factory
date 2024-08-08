@@ -1,0 +1,64 @@
+{
+	"name": "21-Parameter",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_ASQL_AWDW2",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceEmpleado"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkreporteEmpleado"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     Cargo as string",
+				"}",
+				"source(output(",
+				"          Nombre as string,",
+				"          Cargo as string,",
+				"          FechaContratacion as date,",
+				"          Telefono as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'procedure',",
+				"     store: 'sqlserver',",
+				"     procedureName: 'SP_REP_EMP_CARGO',",
+				"     schemaName: 'dbo',",
+				"     resultSet: true,",
+				"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceEmpleado",
+				"sourceEmpleado filter(Cargo==$Cargo) ~> filter",
+				"filter sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '21.Parameter',",
+				"     columnDelimiter: ';',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['ReporteEmpleado.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sinkreporteEmpleado"
+			]
+		}
+	}
+}
