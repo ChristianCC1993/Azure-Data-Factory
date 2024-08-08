@@ -1076,6 +1076,12 @@
 						},
 						{
 							"name": "derivedColumn1"
+						},
+						{
+							"name": "split1"
+						},
+						{
+							"name": "union1"
 						}
 					],
 					"scriptLines": [
@@ -1099,18 +1105,21 @@
 						"     tableName: 'Empleado',",
 						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceEmpleado",
 						"sourceEmpleado alterRow(deleteIf(Cargo=='Production Technician - WC40'),",
-						"     updateIf(Cargo=='Production Technician - WC45')) ~> alterRow1",
-						"alterRow1 derive(Cargo = 'REPRESENTANTE DE VENTA') ~> derivedColumn1",
-						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     upsertIf(Cargo!='Production Technician - WC40')) ~> alterRow1",
+						"split1@uno derive(Cargo = 'REPRESENTANTE DE VENTA') ~> derivedColumn1",
+						"alterRow1 split(Cargo=='Production Technician - WC45',",
+						"     disjoint: false) ~> split1@(uno, dos)",
+						"derivedColumn1, split1@dos union(byName: true)~> union1",
+						"union1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     format: 'table',",
 						"     store: 'sqlserver',",
 						"     schemaName: 'dbo',",
 						"     tableName: 'Empleado',",
 						"     insertable: false,",
-						"     updateable: true,",
+						"     updateable: false,",
 						"     deletable: true,",
-						"     upsertable: false,",
+						"     upsertable: true,",
 						"     keys:['ID'],",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
