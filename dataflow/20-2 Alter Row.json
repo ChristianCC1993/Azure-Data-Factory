@@ -1,0 +1,69 @@
+{
+	"name": "20-2 Alter Row",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sourceEmpleadoNuevo"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "LinkedServices_ASQL_AWDW2",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sinkEmpleado"
+				}
+			],
+			"transformations": [
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as short,",
+				"          Nombre as string,",
+				"          Apellido as string,",
+				"          Cargo as string,",
+				"          FechaContratacion as date,",
+				"          FechaCumpleanio as date,",
+				"          Email as string,",
+				"          Telefono as string,",
+				"          ContactoEmergencia as string,",
+				"          ContactoEmergenciaTelefono as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'excel',",
+				"     container: 'dataflowdataset',",
+				"     folderPath: '20.AlterRow',",
+				"     fileName: 'EmpleadoNuevo.xlsx',",
+				"     sheetName: 'Data',",
+				"     firstRowAsHeader: true) ~> sourceEmpleadoNuevo",
+				"sourceEmpleadoNuevo alterRow(upsertIf(true())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'table',",
+				"     store: 'sqlserver',",
+				"     schemaName: 'dbo',",
+				"     tableName: 'Empleado',",
+				"     insertable: false,",
+				"     updateable: false,",
+				"     deletable: false,",
+				"     upsertable: true,",
+				"     keys:['ID'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkEmpleado"
+			]
+		}
+	}
+}
