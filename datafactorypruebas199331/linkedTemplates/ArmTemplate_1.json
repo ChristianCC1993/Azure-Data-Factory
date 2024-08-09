@@ -25,6 +25,73 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_TXT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"Archivo": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "5. Iteration and Conditionals"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().Archivo",
+							"type": "Expression"
+						},
+						"folderPath": "8. Iteration and conditionals/1. ForEach",
+						"fileSystem": "dataset"
+					},
+					"columnDelimiter": "|",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADSL_Lego_Themes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ADLS_datalakeudemylaboratorio",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "1. Ingesta"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "themes.txt",
+						"fileSystem": "lego"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": false,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ASQL_AWDW_Customer')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -210,6 +277,48 @@
 						"type": "Expression"
 					}
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"CarpetaOrigen": {
+						"type": "String"
+					},
+					"FileExcel": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "5. Iteration and Conditionals"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Ventas",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().FileExcel",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('8. Iteration and conditionals/3.If Conditional/',dataset().CarpetaOrigen)",
+							"type": "Expression"
+						},
+						"fileSystem": "dataset"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
 			},
 			"dependsOn": []
 		},
@@ -1562,234 +1671,6 @@
 						"          DiscontinuedDate",
 						"     ),",
 						"     partitionBy('hash', 1)) ~> sinkProductJSON"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/20-1-D')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sourceEmpleadoNuevo"
-						}
-					],
-					"sinks": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_ASQL_AWDW2",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "alterRow"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as short,",
-						"          Nombre as string,",
-						"          Apellido as string,",
-						"          Cargo as string,",
-						"          FechaContratacion as date,",
-						"          FechaCumpleanio as date,",
-						"          Email as string,",
-						"          Telefono as string,",
-						"          ContactoEmergencia as string,",
-						"          ContactoEmergenciaTelefono as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'excel',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '20.AlterRow',",
-						"     fileName: 'EmpleadoNuevo.xlsx',",
-						"     sheetName: 'Data',",
-						"     firstRowAsHeader: true) ~> sourceEmpleadoNuevo",
-						"sourceEmpleadoNuevo alterRow(insertIf(year(FechaContratacion)==2007),",
-						"     deleteIf(true())) ~> alterRow",
-						"alterRow sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'table',",
-						"     store: 'sqlserver',",
-						"     schemaName: 'dbo',",
-						"     tableName: 'Empleado',",
-						"     insertable: true,",
-						"     updateable: false,",
-						"     deletable: false,",
-						"     upsertable: false,",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/20-2 Alter Row')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sourceEmpleadoNuevo"
-						}
-					],
-					"sinks": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_ASQL_AWDW2",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkEmpleado"
-						}
-					],
-					"transformations": [
-						{
-							"name": "alterRow"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as short,",
-						"          Nombre as string,",
-						"          Apellido as string,",
-						"          Cargo as string,",
-						"          FechaContratacion as date,",
-						"          FechaCumpleanio as date,",
-						"          Email as string,",
-						"          Telefono as string,",
-						"          ContactoEmergencia as string,",
-						"          ContactoEmergenciaTelefono as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false,",
-						"     format: 'excel',",
-						"     container: 'dataflowdataset',",
-						"     folderPath: '20.AlterRow',",
-						"     fileName: 'EmpleadoNuevo.xlsx',",
-						"     sheetName: 'Data',",
-						"     firstRowAsHeader: true) ~> sourceEmpleadoNuevo",
-						"sourceEmpleadoNuevo alterRow(upsertIf(true())) ~> alterRow",
-						"alterRow sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'table',",
-						"     store: 'sqlserver',",
-						"     schemaName: 'dbo',",
-						"     tableName: 'Empleado',",
-						"     insertable: false,",
-						"     updateable: false,",
-						"     deletable: false,",
-						"     upsertable: true,",
-						"     keys:['ID'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sinkEmpleado"
-					]
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/20-Alter Row')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_ASQL_AWDW2",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sourceEmpleado"
-						}
-					],
-					"sinks": [
-						{
-							"linkedService": {
-								"referenceName": "LinkedServices_ASQL_AWDW2",
-								"type": "LinkedServiceReference"
-							},
-							"name": "sinkEmpleado"
-						}
-					],
-					"transformations": [
-						{
-							"name": "alterRow1"
-						},
-						{
-							"name": "derivedColumn1"
-						},
-						{
-							"name": "split1"
-						},
-						{
-							"name": "union1"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          ID as integer,",
-						"          Nombre as string,",
-						"          Apellido as string,",
-						"          Cargo as string,",
-						"          FechaContratacion as date,",
-						"          FechaCumpleanio as date,",
-						"          Email as string,",
-						"          Telefono as string,",
-						"          ContactoEmergencia as string,",
-						"          ContactoEmergenciaTelefono as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'table',",
-						"     store: 'sqlserver',",
-						"     schemaName: 'dbo',",
-						"     tableName: 'Empleado',",
-						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceEmpleado",
-						"sourceEmpleado alterRow(deleteIf(Cargo=='Production Technician - WC40'),",
-						"     upsertIf(Cargo!='Production Technician - WC40')) ~> alterRow1",
-						"split1@uno derive(Cargo = 'REPRESENTANTE DE VENTA') ~> derivedColumn1",
-						"alterRow1 split(Cargo=='Production Technician - WC45',",
-						"     disjoint: false) ~> split1@(uno, dos)",
-						"derivedColumn1, split1@dos union(byName: true)~> union1",
-						"union1 sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     format: 'table',",
-						"     store: 'sqlserver',",
-						"     schemaName: 'dbo',",
-						"     tableName: 'Empleado',",
-						"     insertable: false,",
-						"     updateable: false,",
-						"     deletable: true,",
-						"     upsertable: true,",
-						"     keys:['ID'],",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sinkEmpleado"
 					]
 				}
 			},
