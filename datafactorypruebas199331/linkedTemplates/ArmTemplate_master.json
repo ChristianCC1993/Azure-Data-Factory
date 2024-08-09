@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ADLS_datalakeudemylaboratorio'"
 		},
+		"AzureDataLakeStorage_KV_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeStorage_KV'"
+		},
 		"AzureSqlDatabase1_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'AzureSqlDatabase1'"
@@ -36,6 +40,14 @@
 			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
 		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"AzurLinkedServices_KeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KeyVault-ADFs-199331.vault.azure.net/"
+		},
+		"AzureDataLakeStorage_KV_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
@@ -109,6 +121,9 @@
 					"ADLS_datalakeudemylaboratorio_accountKey": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_accountKey')]"
 					},
+					"AzureDataLakeStorage_KV_accountKey": {
+						"value": "[parameters('AzureDataLakeStorage_KV_accountKey')]"
+					},
 					"AzureSqlDatabase1_password": {
 						"value": "[parameters('AzureSqlDatabase1_password')]"
 					},
@@ -129,6 +144,12 @@
 					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
+					},
+					"AzurLinkedServices_KeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzurLinkedServices_KeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"AzureDataLakeStorage_KV_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage_KV_properties_typeProperties_url')]"
 					},
 					"AzureSqlDatabase1_properties_typeProperties_server": {
 						"value": "[parameters('AzureSqlDatabase1_properties_typeProperties_server')]"

@@ -8,6 +8,9 @@
 		"ADLS_datalakeudemylaboratorio_accountKey": {
 			"value": ""
 		},
+		"AzureDataLakeStorage_KV_accountKey": {
+			"value": ""
+		},
 		"AzureSqlDatabase1_password": {
 			"value": ""
 		},
@@ -27,6 +30,12 @@
 			"value": ""
 		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
+			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
+		},
+		"AzurLinkedServices_KeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://KeyVault-ADFs-199331.vault.azure.net/"
+		},
+		"AzureDataLakeStorage_KV_properties_typeProperties_url": {
 			"value": "https://datalakeudemy1993.dfs.core.windows.net/"
 		},
 		"AzureSqlDatabase1_properties_typeProperties_server": {
