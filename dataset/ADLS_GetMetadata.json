@@ -1,0 +1,26 @@
+{
+	"name": "ADLS_GetMetadata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "4. General Activities"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "7. General Activities/1. Get Metadata",
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
