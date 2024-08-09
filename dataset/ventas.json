@@ -1,0 +1,64 @@
+{
+	"name": "ventas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LinkedServices_ASQL_AWDW2",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "5. Iteration and Conditionals"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "VentasID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Nombre",
+				"type": "varchar"
+			},
+			{
+				"name": "Apellido",
+				"type": "varchar"
+			},
+			{
+				"name": "dni",
+				"type": "varchar"
+			},
+			{
+				"name": "fechaPedido",
+				"type": "date"
+			},
+			{
+				"name": "producto",
+				"type": "varchar"
+			},
+			{
+				"name": "NumeroOrden",
+				"type": "varchar"
+			},
+			{
+				"name": "precioUnitario",
+				"type": "real",
+				"precision": 7
+			},
+			{
+				"name": "Cantidad",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Total",
+				"type": "real",
+				"precision": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Ventas"
+		}
+	}
+}

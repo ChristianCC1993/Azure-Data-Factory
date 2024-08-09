@@ -1,0 +1,26 @@
+{
+	"name": "ADLS_DLUdemyLab_Folder",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "5. Iteration and Conditionals"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "8. Iteration and conditionals/1. ForEach",
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
