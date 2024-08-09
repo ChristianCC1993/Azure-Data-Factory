@@ -35,10 +35,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LinkedServices_StorageUdemyLaboratorio'"
 		},
-		"FileServer1_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'FileServer1'"
-		},
 		"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datalakeudemy1993.dfs.core.windows.net/"
@@ -82,14 +78,6 @@
 		"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
 			"type": "string",
 			"defaultValue": "christian"
-		},
-		"FileServer1_properties_typeProperties_host": {
-			"type": "string",
-			"defaultValue": "C:\\Users\\Christian"
-		},
-		"FileServer1_properties_typeProperties_userId": {
-			"type": "string",
-			"defaultValue": "Christian"
 		}
 	},
 	"variables": {
@@ -394,6 +382,37 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ADLS_DataLakeUdemyLaboratorio')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_Delete')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "4. General Activities"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "7. General Activities/2. Delete",
+						"fileSystem": "dataset"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_KV')]"
 			]
 		},
 		{
@@ -754,30 +773,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/FileServer1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "FileServer",
-				"typeProperties": {
-					"host": "[parameters('FileServer1_properties_typeProperties_host')]",
-					"userId": "[parameters('FileServer1_properties_typeProperties_userId')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('FileServer1_password')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "integrationRuntime1",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/integrationRuntimes/integrationRuntime1')]"
 			]
 		}
 	]

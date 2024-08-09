@@ -139,9 +139,6 @@
 					"LinkedServices_StorageUdemyLaboratorio_connectionString": {
 						"value": "[parameters('LinkedServices_StorageUdemyLaboratorio_connectionString')]"
 					},
-					"FileServer1_password": {
-						"value": "[parameters('FileServer1_password')]"
-					},
 					"ADLS_datalakeudemylaboratorio_properties_typeProperties_url": {
 						"value": "[parameters('ADLS_datalakeudemylaboratorio_properties_typeProperties_url')]"
 					},
@@ -174,12 +171,6 @@
 					},
 					"LinkedServices_ASQL_AWDW_properties_typeProperties_userName": {
 						"value": "[parameters('LinkedServices_ASQL_AWDW_properties_typeProperties_userName')]"
-					},
-					"FileServer1_properties_typeProperties_host": {
-						"value": "[parameters('FileServer1_properties_typeProperties_host')]"
-					},
-					"FileServer1_properties_typeProperties_userId": {
-						"value": "[parameters('FileServer1_properties_typeProperties_userId')]"
 					}
 				}
 			},
@@ -198,6 +189,15 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"FileServer1_password": {
+						"value": "[parameters('FileServer1_password')]"
+					},
+					"FileServer1_properties_typeProperties_host": {
+						"value": "[parameters('FileServer1_properties_typeProperties_host')]"
+					},
+					"FileServer1_properties_typeProperties_userId": {
+						"value": "[parameters('FileServer1_properties_typeProperties_userId')]"
 					}
 				}
 			},
