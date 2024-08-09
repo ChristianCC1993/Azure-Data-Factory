@@ -1,0 +1,33 @@
+{
+	"name": "ADLS_Excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Archivo": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "5. Iteration and Conditionals"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Data",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().Archivo",
+					"type": "Expression"
+				},
+				"folderPath": "8. Iteration and conditionals/1. ForEach",
+				"fileSystem": "dataset"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
