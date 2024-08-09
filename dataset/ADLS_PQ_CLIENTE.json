@@ -1,0 +1,34 @@
+{
+	"name": "ADLS_PQ_CLIENTE",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "6. Power Query"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Cliente",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Data Exportaciones.xlsx",
+				"folderPath": "8. Iteration and conditionals/9. Power Query/Data",
+				"fileSystem": "dataset"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "IdCliente",
+				"type": "String"
+			},
+			{
+				"name": "Cliente",
+				"type": "String"
+			}
+		]
+	}
+}
