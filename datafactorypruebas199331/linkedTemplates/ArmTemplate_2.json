@@ -13,6 +13,73 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/21-Parameter')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_ASQL_AWDW2",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sourceEmpleado"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "LinkedServices_StorageUdemyLaboratorio",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sinkreporteEmpleado"
+						}
+					],
+					"transformations": [
+						{
+							"name": "filter"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     Cargo as string",
+						"}",
+						"source(output(",
+						"          Nombre as string,",
+						"          Cargo as string,",
+						"          FechaContratacion as date,",
+						"          Telefono as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'procedure',",
+						"     store: 'sqlserver',",
+						"     procedureName: 'SP_REP_EMP_CARGO',",
+						"     schemaName: 'dbo',",
+						"     resultSet: true,",
+						"     isolationLevel: 'READ_UNCOMMITTED') ~> sourceEmpleado",
+						"sourceEmpleado filter(Cargo==$Cargo) ~> filter",
+						"filter sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     container: 'dataflowdataset',",
+						"     folderPath: '21.Parameter',",
+						"     columnDelimiter: ';',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ReporteEmpleado.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkreporteEmpleado"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/3-Join')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -702,42 +769,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ADLS_Excel')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage_KV",
-					"type": "LinkedServiceReference"
-				},
-				"parameters": {
-					"Archivo": {
-						"type": "string"
-					}
-				},
-				"folder": {
-					"name": "5. Iteration and Conditionals"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Data",
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": {
-							"value": "@dataset().Archivo",
-							"type": "Expression"
-						},
-						"folderPath": "8. Iteration and conditionals/1. ForEach",
-						"fileSystem": "dataset"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": []
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/1-Get Metadata')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -1313,7 +1344,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/2-ForEach-txt')]",
+			"name": "[concat(parameters('factoryName'), '/2-ForEach-XLSX')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -1374,7 +1405,7 @@
 						}
 					},
 					{
-						"name": "Filter1",
+						"name": "Filter XLSX",
 						"type": "Filter",
 						"dependsOn": [
 							{
@@ -1391,17 +1422,17 @@
 								"type": "Expression"
 							},
 							"condition": {
-								"value": "@contains(item().name,'.txt')",
+								"value": "@contains(item().name,'.xlsx')",
 								"type": "Expression"
 							}
 						}
 					},
 					{
-						"name": "ForEach txt",
+						"name": "ForEach XLSX",
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Filter1",
+								"activity": "Filter XLSX",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -1410,13 +1441,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"items": {
-								"value": "@activity('Filter1').output.value",
+								"value": "@activity('Filter XLSX').output.value",
 								"type": "Expression"
 							},
 							"isSequential": true,
 							"activities": [
 								{
-									"name": "Copy data TXT",
+									"name": "Copy data XLSX",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {
@@ -1429,14 +1460,11 @@
 									"userProperties": [],
 									"typeProperties": {
 										"source": {
-											"type": "DelimitedTextSource",
+											"type": "ExcelSource",
 											"storeSettings": {
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
 												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
 											}
 										},
 										"sink": {
@@ -1456,7 +1484,7 @@
 									},
 									"inputs": [
 										{
-											"referenceName": "ADLS_TXT",
+											"referenceName": "ADLS_Excel",
 											"type": "DatasetReference",
 											"parameters": {
 												"Archivo": {
