@@ -148,7 +148,10 @@
 							"outputs": [
 								{
 									"referenceName": "ADLS_IfCondicionl_Output",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"Archivo": "Ventas.txt"
+									}
 								}
 							]
 						},
@@ -210,20 +213,18 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "DelimitedTextSource",
+									"type": "ExcelSource",
 									"storeSettings": {
 										"type": "AzureBlobFSReadSettings",
 										"recursive": true,
 										"enablePartitionDiscovery": false
-									},
-									"formatSettings": {
-										"type": "DelimitedTextReadSettings"
 									}
 								},
 								"sink": {
 									"type": "DelimitedTextSink",
 									"storeSettings": {
-										"type": "AzureBlobFSWriteSettings"
+										"type": "AzureBlobFSWriteSettings",
+										"maxConcurrentConnections": 0
 									},
 									"formatSettings": {
 										"type": "DelimitedTextWriteSettings",
@@ -234,6 +235,128 @@
 								"enableStaging": false,
 								"translator": {
 									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "VentasID",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "VentasID",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Nombre",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Nombre",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Apellido",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Apellido",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "dni",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "dni",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "fechaPedido",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "fechaPedido",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "producto",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "producto",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NumeroOrden",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "NumeroOrden",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "precioUnitario",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "precioUnitario",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Cantidad",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Cantidad",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Total",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Total",
+												"type": "String",
+												"physicalType": "String"
+											}
+										}
+									],
 									"typeConversion": true,
 									"typeConversionSettings": {
 										"allowDataTruncation": true,
@@ -243,15 +366,15 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "ADLS_IF_Conditional",
+									"referenceName": "Excel1",
 									"type": "DatasetReference",
 									"parameters": {
-										"FileExcel": {
-											"value": "@variables('FileExcel')",
-											"type": "Expression"
-										},
 										"CarpetaOrigen": {
 											"value": "@variables('CarpetaOrigen1')",
+											"type": "Expression"
+										},
+										"FileExcel": {
+											"value": "@variables('FileExcel')",
 											"type": "Expression"
 										}
 									}
@@ -260,7 +383,10 @@
 							"outputs": [
 								{
 									"referenceName": "ADLS_IfCondicionl_Output",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"Archivo": "Ventas.txt"
+									}
 								}
 							]
 						},

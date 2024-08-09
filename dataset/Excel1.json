@@ -1,12 +1,15 @@
 {
-	"name": "ADLS_IfCondicionl_Output",
+	"name": "Excel1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureDataLakeStorage_KV",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"Archivo": {
+			"CarpetaOrigen": {
+				"type": "String"
+			},
+			"FileExcel": {
 				"type": "String"
 			}
 		},
@@ -14,21 +17,22 @@
 			"name": "5. Iteration and Conditionals"
 		},
 		"annotations": [],
-		"type": "DelimitedText",
+		"type": "Excel",
 		"typeProperties": {
+			"sheetName": "Ventas",
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": {
-					"value": "@dataset().Archivo",
+					"value": "@dataset().FileExcel",
 					"type": "Expression"
 				},
-				"folderPath": "8. Iteration and conditionals/3.If Conditional/Destino",
+				"folderPath": {
+					"value": "@concat('8. Iteration and conditionals/3.If Conditional/',dataset().CarpetaOrigen)",
+					"type": "Expression"
+				},
 				"fileSystem": "dataset"
 			},
-			"columnDelimiter": ";",
-			"escapeChar": "\\",
-			"firstRowAsHeader": true,
-			"quoteChar": ""
+			"firstRowAsHeader": true
 		},
 		"schema": []
 	}
