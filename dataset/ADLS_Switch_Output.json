@@ -1,0 +1,37 @@
+{
+	"name": "ADLS_Switch_Output",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"NuevaCarpeta": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "5. Iteration and Conditionals"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@dataset().NuevaCarpeta",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "'dataset/8. Iteration and conditionals/4.Switch/Destino'",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": false,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
