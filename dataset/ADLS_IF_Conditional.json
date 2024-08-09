@@ -31,7 +31,7 @@
 				},
 				"fileSystem": "dataset"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": ";",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
