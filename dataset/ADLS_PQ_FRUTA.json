@@ -1,0 +1,36 @@
+{
+	"name": "ADLS_PQ_FRUTA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "6. Power Query"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Frutas.csv",
+				"folderPath": "9. Power Query/Data",
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "IdFrutas",
+				"type": "String"
+			},
+			{
+				"name": "Frutas",
+				"type": "String"
+			}
+		]
+	}
+}
