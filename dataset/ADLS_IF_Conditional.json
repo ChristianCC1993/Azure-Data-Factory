@@ -1,0 +1,41 @@
+{
+	"name": "ADLS_IF_Conditional",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileExcel": {
+				"type": "string"
+			},
+			"CarpetaOrigen": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "5. Iteration and Conditionals"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().FileExcel",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('8. Iteration and conditionals/3.If Conditional/',dataset().CarpetaOrigen)",
+					"type": "Expression"
+				},
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
