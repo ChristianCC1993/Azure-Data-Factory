@@ -35,7 +35,7 @@
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
 												"wildcardFolderPath": {
-													"value": "@pipeline().parameters.Automovil",
+													"value": "@concat('/8. Iteration and conditionals/4.Switch/Origen/',\npipeline().parameters.Automovil)",
 													"type": "Expression"
 												},
 												"wildcardFileName": "*",
@@ -115,7 +115,7 @@
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
 												"wildcardFolderPath": {
-													"value": "@pipeline().parameters.Movie",
+													"value": "@concat('/8. Iteration and conditionals/4.Switch/Origen/',\npipeline().parameters.Movie)",
 													"type": "Expression"
 												},
 												"wildcardFileName": "*",
@@ -195,7 +195,7 @@
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
 												"wildcardFolderPath": {
-													"value": "@pipeline().parameters.Ventas",
+													"value": "@concat('/8. Iteration and conditionals/4.Switch/Origen/',\npipeline().parameters.Ventas)",
 													"type": "Expression"
 												},
 												"wildcardFileName": "*",

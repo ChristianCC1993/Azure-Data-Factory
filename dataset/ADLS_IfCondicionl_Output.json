@@ -8,6 +8,9 @@
 		"parameters": {
 			"Archivo": {
 				"type": "String"
+			},
+			"NuevaCarpeta": {
+				"type": "String"
 			}
 		},
 		"folder": {
@@ -22,8 +25,14 @@
 					"value": "@dataset().Archivo",
 					"type": "Expression"
 				},
-				"folderPath": "8. Iteration and conditionals/3.If Conditional/Destino",
-				"fileSystem": "dataset"
+				"folderPath": {
+					"value": "@dataset().NuevaCarpeta",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "'dataset/8. Iteration and conditionals/3.If Conditional/Destino'",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ";",
 			"escapeChar": "\\",
