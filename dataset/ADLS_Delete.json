@@ -1,0 +1,26 @@
+{
+	"name": "ADLS_Delete",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage_KV",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "4. General Activities"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "7. General Activities/2. Delete",
+				"fileSystem": "dataset"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
