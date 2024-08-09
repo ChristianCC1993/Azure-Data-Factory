@@ -34,6 +34,11 @@
 											"storeSettings": {
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
+												"wildcardFolderPath": {
+													"value": "@pipeline().parameters.Automovil",
+													"type": "Expression"
+												},
+												"wildcardFileName": "*",
 												"enablePartitionDiscovery": false
 											},
 											"formatSettings": {
@@ -109,6 +114,11 @@
 											"storeSettings": {
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
+												"wildcardFolderPath": {
+													"value": "@pipeline().parameters.Movie",
+													"type": "Expression"
+												},
+												"wildcardFileName": "*",
 												"enablePartitionDiscovery": false
 											},
 											"formatSettings": {
@@ -184,6 +194,11 @@
 											"storeSettings": {
 												"type": "AzureBlobFSReadSettings",
 												"recursive": true,
+												"wildcardFolderPath": {
+													"value": "@pipeline().parameters.Ventas",
+													"type": "Expression"
+												},
+												"wildcardFileName": "*",
 												"enablePartitionDiscovery": false
 											},
 											"formatSettings": {
