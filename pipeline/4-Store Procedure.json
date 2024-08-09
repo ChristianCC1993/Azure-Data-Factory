@@ -1,0 +1,40 @@
+{
+	"name": "4-Store Procedure",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedure",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[SP_REP_EMP_CARGO]",
+					"storedProcedureParameters": {
+						"Cargo": {
+							"value": {
+								"value": "REPRESENTANTE DE VENTA",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LinkedServices_ASQL_AWDW2",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "4. General Activities"
+		},
+		"annotations": []
+	}
+}

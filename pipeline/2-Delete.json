@@ -29,7 +29,8 @@
 					"enableLogging": true,
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
-						"fileListPath": "dataset/7. General Activities/2. Delete/Lista.txt",
+						"recursive": true,
+						"wildcardFileName": "*.csv",
 						"enablePartitionDiscovery": false
 					}
 				}
