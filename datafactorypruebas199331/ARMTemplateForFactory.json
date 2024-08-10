@@ -6543,6 +6543,217 @@
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_ASQL_AWDW2')]",
 				"[concat(variables('factoryId'), '/linkedServices/LinkedServices_StorageUdemyLaboratorio')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_PQ_Exportacion')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "6. Power Query"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Data Exportacion",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Data Exportaciones.xlsx",
+						"folderPath": "9. Power Query/Data",
+						"fileSystem": "dataset"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "IDEmpresa",
+						"type": "String"
+					},
+					{
+						"name": "IDFrutas",
+						"type": "String"
+					},
+					{
+						"name": "IDCliente",
+						"type": "String"
+					},
+					{
+						"name": "Cantidad (Kg)",
+						"type": "String"
+					},
+					{
+						"name": "Año",
+						"type": "String"
+					},
+					{
+						"name": "Pais",
+						"type": "String"
+					},
+					{
+						"name": "Precio(kg)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_KV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_PQ_CLIENTE')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "6. Power Query"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Cliente",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Data Exportaciones.xlsx",
+						"folderPath": "8. Iteration and conditionals/9. Power Query/Data",
+						"fileSystem": "dataset"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "IdCliente",
+						"type": "String"
+					},
+					{
+						"name": "Cliente",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_KV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_PQ_EMPRESA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "6. Power Query"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Empresa.csv",
+						"folderPath": "9. Power Query/Data",
+						"fileSystem": "dataset"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "IdEmpresa",
+						"type": "String"
+					},
+					{
+						"name": "NombreEmpresas",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_KV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ADLS_PQ_FRUTA')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage_KV",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "6. Power Query"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Frutas.csv",
+						"folderPath": "9. Power Query/Data",
+						"fileSystem": "dataset"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "IdFrutas",
+						"type": "String"
+					},
+					{
+						"name": "Frutas",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage_KV')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TRIGGER 1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "2-ForEach-txt",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 1,
+						"startTime": "2024-08-10T20:27:00",
+						"timeZone": "Pacific SA Standard Time",
+						"schedule": {}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/2-ForEach-txt')]"
+			]
 		}
 	]
 }
