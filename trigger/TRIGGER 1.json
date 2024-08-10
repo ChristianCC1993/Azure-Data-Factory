@@ -16,7 +16,7 @@
 			"recurrence": {
 				"frequency": "Minute",
 				"interval": 10,
-				"startTime": "2024-08-10T19:40:00",
+				"startTime": "2024-08-09T19:40:00",
 				"timeZone": "Pacific SA Standard Time"
 			}
 		}
