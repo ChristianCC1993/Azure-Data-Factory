@@ -6745,7 +6745,7 @@
 					"recurrence": {
 						"frequency": "Day",
 						"interval": 1,
-						"startTime": "2024-08-10T20:27:00",
+						"startTime": "2024-08-09T20:40:00",
 						"timeZone": "Pacific SA Standard Time",
 						"schedule": {}
 					}
