@@ -1134,11 +1134,10 @@
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
-						"frequency": "Day",
-						"interval": 1,
-						"startTime": "2024-08-09T20:40:00",
-						"timeZone": "Pacific SA Standard Time",
-						"schedule": {}
+						"frequency": "Minute",
+						"interval": 10,
+						"startTime": "2024-08-09T19:40:00",
+						"timeZone": "Pacific SA Standard Time"
 					}
 				}
 			},
