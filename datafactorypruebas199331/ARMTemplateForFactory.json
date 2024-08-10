@@ -6734,7 +6734,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "2-ForEach-txt",
+							"referenceName": "1-Get Metadata",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -6751,7 +6751,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/2-ForEach-txt')]"
+				"[concat(variables('factoryId'), '/pipelines/1-Get Metadata')]"
 			]
 		}
 	]
